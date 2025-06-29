@@ -176,11 +176,20 @@ header input:focus {
 }
 
 .column {
-  background-color: #ffffff;
+  background-color: #fff;
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
   padding: 16px;
   width: 300px;
+}
+
+.check-column {
+  transform: scale(1.2);
+  accent-color: #0077cc;
+}
+
+.column.danm {
+  background-color: #b2ffaf;
 }
 
 /* TITLE + CONTROLS */
@@ -268,6 +277,25 @@ header input:focus {
   background-color: #f0f8ff;
 }
 
+.card.danm {
+  background-color: #34ec2e;
+  opacity: 0.6;
+}
+
+.card.danm:hover {
+  background-color: #6eee83;;
+}
+
+.card .check-task  {
+  transform: scale(1.2);
+  accent-color: #0077cc;
+}
+
+.card.danm .check-task {
+  transform: scale(1.2);
+  accent-color: #0077cc;
+}
+
 .card .bx-hand {
     cursor: grab;
 }
@@ -279,10 +307,7 @@ header input:focus {
   font-weight: normal;
 }
 
-.card input[type="checkbox"] {
-  transform: scale(1.2);
-  accent-color: #0077cc;
-}
+
 
 .card button {
   background: none;
@@ -298,12 +323,6 @@ header input:focus {
 
 .card:hover .remove-edit-card {
   display: flex;
-}
-
-/* CONCLUÍDA */
-.card[data-status="done"] {
-  opacity: 0.6;
-  text-decoration: line-through;
 }
 
 /*JS - INPUT EDIT COLUMN*/
@@ -324,4 +343,16 @@ header input:focus {
   padding: 5px 5px;
   border-radius: 6px;
   width: 50%;
+}
+
+.card.baixa {
+  border-left: 5px solid #0077cc;
+}
+
+.card.media {
+  border-left: 5px solid orange;
+}
+
+.card.alta {
+  border-left: 5px solid red;
 }
