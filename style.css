@@ -71,6 +71,7 @@ header input:focus {
   padding: 10px;
   border-radius: 8px;
   background-color: #c9c9c9;
+  user-select: none; 
 }
 
 #clear-done-tasks {
@@ -109,6 +110,7 @@ header input:focus {
   justify-content: center;
   align-items: center;
   z-index: 100;
+  user-select: none; 
 }
 
 .modal {
@@ -123,6 +125,7 @@ header input:focus {
   width: 90%;
   max-width: 400px;
   z-index: 100;
+  user-select: none; 
 }
 
 .modal input,
@@ -171,8 +174,10 @@ header input:focus {
 /* COLUMNS */
 .all-columns {
   display: flex;
+  align-items: flex-start;
   gap: 20px;
   flex-wrap: wrap;
+  user-select: none; 
 }
 
 .column {
@@ -271,6 +276,7 @@ header input:focus {
   gap: 10px;
   border-left: 4px solid #0077cc;
   transition: background 0.2s;
+  user-select: none; 
 }
 
 .card:hover {
@@ -298,6 +304,7 @@ header input:focus {
 
 .card .bx-hand {
     cursor: grab;
+    font-size: 20px;
 }
 
 .card p {
@@ -355,4 +362,12 @@ header input:focus {
 
 .card.alta {
   border-left: 5px solid red;
+}
+
+
+/*PARTE JS: DRAG AND DROP*/
+
+.select {
+  border: 1px solid #005fa3;
+  background-color: #e5dcf1;
 }

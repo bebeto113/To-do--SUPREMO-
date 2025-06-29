@@ -11,7 +11,11 @@ const saveModal = document.getElementById('save-column')
 const titleDigitedModal = document.getElementById('column-title')
 const allColumns = document.querySelector('.all-columns')
 
+const taskPriority = document.getElementById('task-priority')
+
 // Coluna inicial (já existente no HTML)
+let draggedCard = null //para o DRAGGABLE
+
 let listColumns = [
   {
     id: 0,
@@ -205,8 +209,9 @@ function addCard() {
 
 
   inputTextCard.value = ''
-  inputSelectCard.value = ''
+  inputSelectCard.value = 'baixa'
   modalCard.style.display = 'none'
+  
 
   renderColumns() // Isso renderiza todas as colunas com seus cards atualizados
 }
@@ -280,6 +285,8 @@ allColumns.addEventListener('click', event => {
     currentColumnId = Number(column.dataset.id)
     // guarda esse columnId em alguma variável (por exemplo: currentColumnId)
     // e abre o modal de card
+
+    inputTextCard.focus()
 
     return
   }
@@ -402,12 +409,10 @@ allColumns.addEventListener('click', event => {
       columnCheckbox.checked = false
     }
 
-    
     salvarNoLocalStorage()
     renderColumns()
     return
   }
-
 
   //CHECK COLUNA
 
@@ -420,13 +425,11 @@ allColumns.addEventListener('click', event => {
     const column = listColumns.find(col => col.id === columnId)
     if (!column) return
 
-
     const novoStatus = checkColumn.checked ? "done" : "inProgress"
 
     column.cards.forEach(card => {
       card.status = novoStatus
     })
-
 
     column.status = novoStatus
     if (novoStatus === "done") {
@@ -439,9 +442,144 @@ allColumns.addEventListener('click', event => {
     renderColumns()
     return
   }
-
-
 })
+
+/////DRAG AND DROP /////////
+
+  //BX-HAND
+
+allColumns.addEventListener("mousedown", (event) => {
+  
+  const handDrag = event.target.closest(".bxr.bx-hand")
+
+  if (handDrag) {
+    const cardElement = handDrag.closest(".card")
+    if (cardElement) {
+      // Aqui permitimos o arrasto apenas no clique da maozinha
+      draggedCard = cardElement
+      cardElement.setAttribute("draggable", "true")
+    }
+  }
+})
+
+allColumns.addEventListener("dragstart", (event) => {
+  // Garante que só inicia o arrasto se for pela mão
+  if (event.target !== draggedCard) {
+    event.preventDefault()
+  }
+})
+
+allColumns.addEventListener("dragend", (event) => {
+  if (draggedCard) {
+    draggedCard.removeAttribute("draggable")
+    draggedCard = null
+  }
+})
+
+allColumns.addEventListener("dragenter", (event) => {
+  const column = event.target.closest(".column")
+
+  if (column) {
+    column.classList.add("select")
+  }
+})
+
+allColumns.addEventListener("dragleave", (event) => {
+  const column = event.target.closest(".column")
+  if (!column) return
+
+  const related = event.relatedTarget
+
+  if (related && column.contains(related)) {          
+    // Ainda dentro da coluna, não faz nada
+    return
+  }
+
+  column.classList.remove("select")
+
+//   event.relatedTarget é o elemento para o qual o ponteiro do mouse está indo depois de sair do target.
+// Se esse elemento ainda estiver dentro da coluna (column.contains(related)), significa que o mouse não saiu realmente da coluna — só passou para um filho.
+// Então, só removemos a classe .select se o ponteiro saiu da coluna de verdade.
+})
+
+allColumns.addEventListener("dragover", (event) => {
+  event.preventDefault() // permite o drop
+})
+
+allColumns.addEventListener("drop", (event) => {
+  
+
+  const columnElement = event.target.closest(".column")
+  if (!columnElement || !draggedCard) return
+
+  columnElement.classList.remove("select") // tira o highlight
+
+  // Mover o card no DOM:
+  columnElement.querySelector(".cont-cards").appendChild(draggedCard)
+
+  // Atualizar o estado listColumns:
+  const cardId = Number(draggedCard.dataset.id)
+
+  // Remove o card da coluna antiga:
+  listColumns.forEach(col => {
+    col.cards = col.cards.filter(card => card.id !== cardId)
+  })
+
+  // Adiciona o card na nova coluna:
+  const newColumnId = Number(columnElement.dataset.id)
+  const newColumn = listColumns.find(col => col.id === newColumnId)
+  if (!newColumn) return
+
+  // Como temos o card só no DOM, recria o objeto para inserir no array:
+  // Alternativa: você pode guardar o objeto card na variável draggedCardData na hora do dragStart
+  // Mas aqui vamos simplificar pegando os dados do dataset e texto do card:
+  const cardTexto = draggedCard.querySelector("p").textContent
+  const cardPrioridade = draggedCard.dataset.priority || "baixa"
+  const cardCategoria = draggedCard.dataset.category || "trabalho"
+  const cardStatus = draggedCard.dataset.status || "inProgress"
+
+  newColumn.cards.push({
+    id: cardId,
+    texto: cardTexto,
+    prioridade: cardPrioridade,
+    status: cardStatus,
+    categoria: cardCategoria
+  })
+
+  // Limpando o draggable e a referência
+  draggedCard.removeAttribute("draggable")
+  draggedCard = null
+
+  salvarNoLocalStorage()
+  renderColumns()
+})
+
+//COFIGURADO BOTAO EXCLUIR CONCLUIDAS
+
+const btnClearDone = document.getElementById('clear-done-tasks');
+
+btnClearDone.addEventListener('click', () => {
+  // Nova lista de colunas, só as que NÃO estão 100% concluídas
+  listColumns = listColumns.filter(column => {
+    const allDone = column.cards.length > 0 && column.cards.every(card => card.status === 'done')
+    
+    if (allDone) {
+      // Remove a coluna inteira (não adiciona ela na nova lista)
+      return false
+    } else {
+      // Remove só os cards concluídos dentro da coluna
+      column.cards = column.cards.filter(card => card.status !== 'done')
+      return true
+    }
+
+    // return false dentro do filter: Faz com que o elemento atual (a coluna que está sendo processada naquele momento) não seja incluído no listColumns resultante.
+    // return true dentro do filter: Faz com que o elemento atual (a coluna que está sendo processada, potencialmente com seus cards internos já filtrados) seja incluído no listColumns resultante.
+  })
+
+  salvarNoLocalStorage()
+  renderColumns()
+})
+
 
 //REGRINHA DO CODIGO: 
 //Se você muda o array listColumns, e quer que isso apareça na interface, chame renderColumns().
