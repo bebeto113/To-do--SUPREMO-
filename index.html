@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://cdn.boxicons.com/fonts/basic/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">
+    <title>To Bebeto Doo</title>
+</head>
+
+<body>
+
+    <div class="overlay" id="overlay-modal-column" style="display: none;">
+
+        <div class="modal" id="modalAddColumn">
+            <input type="text" id="column-title" placeholder="Nome da coluna">
+
+            <button id="save-column">Salvar</button>
+            <button id="cancel-column">Cancelar</button>
+        </div>
+
+    </div>
+
+    <div class="overlay" id="overlay-modal-card" style="display: none;">
+
+        <div class="modal" id="modal-add-task">
+            <input type="text" id="task-title" placeholder="Título da tarefa">
+
+            <p>Prioridade: </p>
+
+            <select id="task-priority">
+                <option value="alta">Alta</option>
+                <option value="media">Média</option>
+                <option value="baixa" selected>Baixa</option>
+            </select>
+
+            <button id="save-task">Salvar</button>
+            <button id="cancel-task">Cancelar</button>
+        </div>
+
+    </div>
+
+
+
+    <header>
+        <button type="button" id="btn-menu">☰</button>
+        <input type="text" placeholder="🔍︎   Pesquise sua tarefa">
+    </header>
+
+    <section class="container">
+
+        <div class="filter-add-removeAll">
+            <button type="button" id="clear-done-tasks"> <i class='bxr  bx-trash' style='color:#5f5f5f'></i> Excluir
+                Concluídas</button>
+            <select id="filter">
+                <option value="priority">Prioridade</option>
+                <option value="categories">Categorias</option>
+                <option value="danm">Concluídas</option>
+                <option value="inProgress">Não Concluídas</option>
+            </select>
+            <button type="button" class="btn-add" id="btn-add">+</button>
+        </div>
+
+        <div class="all-columns">
+
+            <div class="column">
+
+                <div class="title-column">
+                    <h1>Nome da coluna</h1>
+
+                    <div class="remove-edit">
+                        <div class="add"> <button type="button" class="add-card"> + </button> </div>
+                        <div class="remove"> <button type="button" class="remove-column"> <i class='bxr  bx-trash'
+                                    style='color:#5f5f5f'></i> </button> </div>
+                        <div class="edit"> <button type="button" class="editName-column"> <i class='bxr  bx-pencil'
+                                    style='color:#5f5f5f'></i> </button> </div>
+                    </div>
+                </div>
+
+                <div class="cont-cards">
+                    <div class="card" data-id="123" data-category="trabalho" data-priority="alta"
+                        data-status="inProgress">
+                        <i class='bxr  bx-hand' style='color:#5f5f5f'></i>
+                        <input type="checkbox" class="check-task">
+                        <p>Texto do card</p>
+                        <div class="remove-edit-card">
+                            <div class="remove"> <button type="button" class="remove-card"> <i class='bxr  bx-trash'
+                                        style='color:#5f5f5f'></i> </button> </div>
+                            <div class="edit"> <button type="button" class="editName-card"> <i class='bxr  bx-pencil'
+                                        style='color:#5f5f5f'></i> </button> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+<script src="script.js"></script>
+
+</html>
